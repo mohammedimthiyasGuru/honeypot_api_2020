@@ -19,6 +19,42 @@ var Entity_user = require('./routes/entity_user_details.routes');
 var client_details = require('./routes/client_details.routes');
 
 
+// App Feature API
+var client_type = require('./routes/client_type.routes');
+var document_type = require('./routes/documents_type.routes');
+var account_type = require('./routes/account_type.routes');
+var portfolio_type = require('./routes/portfolio_type.routes');
+var reportingto_type = require('./routes/reportingto_type.routes');
+var currency_type = require('./routes/currency_type.routes');
+var bucket_type = require('./routes/bucket_type.routes');
+var state_details = require('./routes/state_details.routes');
+var product_type = require('./routes/product_type.routes');
+
+var client_status = require('./routes/client_status.routes');
+var designation_type = require('./routes/designation_type.routes');
+var products_detatils = require('./routes/products_detatils.routes');
+
+
+var userstatusmarking = require('./routes/userstatusmarking.routes');
+var userrole = require('./routes/userrole.routes');
+var usergroup = require('./routes/usergroup.routes');
+var useradd = require('./routes/useradd.routes');
+var usertype = require('./routes/usertype.routes');
+
+var fields_details = require('./routes/fields_details.routes');
+var field_mapping_details = require('./routes/field_mapping_details.routes');
+
+
+
+var Userdetails = require('./routes/Userdetails.routes');
+var Mergedetail = require('./routes/Mergedetail.routes');
+var allocationdata = require('./routes/allocationdata.routes');
+
+
+
+
+
+
 
 
 /*Database connectivity*/
@@ -126,6 +162,54 @@ app.use('/api/', express.static(path.join(__dirname, 'routes')));
 app.use ('/api/activity', ActivityRouter);
 app.use ('/api/entity_user', Entity_user);
 app.use ('/api/client_details', client_details);
+
+// APP Feature
+app.use ('/api/client_type', client_type);
+app.use ('/api/document_type', document_type);
+app.use ('/api/account_type', account_type);
+app.use ('/api/portfolio_type', portfolio_type);
+app.use ('/api/reportingto_type', reportingto_type);
+app.use ('/api/currency_type', currency_type);
+
+app.use ('/api/bucket_type', bucket_type);
+app.use ('/api/client_status', client_status);
+app.use ('/api/state_details', state_details);
+app.use ('/api/product_type', product_type);
+app.use ('/api/products_detatils', products_detatils);
+app.use ('/api/designation_type', designation_type);
+
+
+app.use ('/api/userstatusmarking', userstatusmarking);
+app.use ('/api/userrole', userrole);
+app.use ('/api/usergroup', usergroup);
+app.use ('/api/useradd', useradd);
+app.use ('/api/usertype', usertype);
+
+
+app.use ('/api/fields', fields_details);
+
+app.use ('/api/fields_mapping', field_mapping_details);
+
+
+
+////Imthiyas code///////
+app.use ('/api/userdetails', Userdetails);
+app.use ('/api/mergedetails', Mergedetail);
+app.use ('/api/allocationdata', allocationdata);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

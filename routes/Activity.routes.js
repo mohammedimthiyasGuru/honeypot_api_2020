@@ -4,6 +4,9 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 var ActivityModel = require('./../models/ActivityModel');
+var entity_user_detailsModel = require('./../models/entity_user_detailsModel');
+var client_detailsModel = require('./../models/client_detailsModel');
+
 
 
 router.post('/create', async function(req, res) {
@@ -37,7 +40,7 @@ router.get('/deletes', function (req, res) {
 
 
 
-router.post('/login', function (req, res) {
+router.post('/login',async function (req, res) {
   if(req.body.username == 'honey@gmail.com' && req.body.password == '12345'){
       let c = {
         "Name" : "super Admin",
@@ -47,12 +50,112 @@ router.post('/login', function (req, res) {
         "_id" : "12345",
         "Role" : "Super Admin"
       }
-      res.json({Status:"Success",Message:"User Details", Data : c ,Code:200});
-
+      res.json({Status:"Success",Type : "Super Admin", Message:"User Details", Data : c ,Code:200});
   }else{
-     res.json({Status:"Failed",Message:"Invalid Account", Data : {},Code:404});
+       var entity_details = await entity_user_detailsModel.findOne({comm_email:req.body.username,password:req.body.password});
+       var client_details = await client_detailsModel.findOne({comm_email:req.body.username,password:req.body.password});
+       console.log(entity_details,client_details);
+       if(entity_details == null && client_details == null){
+       res.json({Status:"Failed",Message:"Invalid Account", Data : {},Code:404});
+       }else if(entity_details == null || client_details !== null){
+        res.json({Status:"Success",Type : "Client Details", Message:"Client Details", Data : client_details ,Code:200});
+       }else if(entity_details !== null || client_details == null){
+        res.json({Status:"Success",Type : "Entity Details", Message:"Entity Details", Data : entity_details ,Code:200});
+       }
   }
 });
+
+
+router.post('/forgotpassword',async function (req, res) {
+  if(req.body.username == 'honey@gmail.com'){
+      let c = {
+        "Name" : "super Admin",
+        "type" : "super Admin",
+        "email_id" : "honey@gmail.com",
+        "password" : "12345",
+        "_id" : "12345",
+        "Role" : "Super Admin"
+      }
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'mohammedimthi2395@gmail.com',
+    pass: 'Mohammed2395@1'
+  }
+});
+var mailOptions = {
+  from: 'mohammedimthi2395@gmail.com',
+  to: req.body.username,
+  subject: 'Forgot Password',
+  text: '12345'
+};
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+      res.json({Status:"Success",Type : "Super Admin", Message:"User Details", Data : c ,Code:200});
+  }else{
+       var entity_details = await entity_user_detailsModel.findOne({comm_email:req.body.username,password:req.body.password});
+       var client_details = await client_detailsModel.findOne({comm_email:req.body.username,password:req.body.password});
+       console.log(entity_details,client_details);
+       if(entity_details == null && client_details == null){
+       res.json({Status:"Failed",Message:"Invalid Account", Data : {},Code:404});
+       }
+       else if(entity_details == null || client_details !== null){
+        var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'mohammedimthi2395@gmail.com',
+    pass: 'Mohammed2395@1'
+  }
+});
+var mailOptions = {
+  from: 'mohammedimthi2395@gmail.com',
+  to: client_details.comm_email,
+  subject: 'Forgot Password',
+  text: client_details.password
+};
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+        res.json({Status:"Success",Type : "Client Details", Message:"Client Details", Data : client_details ,Code:200});
+}
+       else if(entity_details !== null || client_details == null){
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'mohammedimthi2395@gmail.com',
+    pass: 'Mohammed2395@1'
+  }
+});
+var mailOptions = {
+  from: 'mohammedimthi2395@gmail.com',
+  to: entity_details.comm_email,
+  subject: 'Forgot Password',
+  text: entity_details.password
+};
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+        res.json({Status:"Success",Type : "Entity Details", Message:"Entity Details", Data : entity_details ,Code:200});
+    }
+  }
+});
+
+
+
+
 
 
 router.post('/getlist_id', function (req, res) {
